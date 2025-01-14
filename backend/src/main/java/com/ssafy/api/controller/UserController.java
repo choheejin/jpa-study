@@ -1,5 +1,7 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.common.exception.BusinessException;
+import com.ssafy.common.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -71,7 +73,7 @@ public class UserController {
 		 */
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userId = userDetails.getUsername();
-		User user = userService.getUserByUserId(userId);
+		User user = userService.getUserByUserId(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 		
 		return ResponseEntity.status(200).body(UserRes.of(user));
 	}

@@ -2,6 +2,8 @@ package com.ssafy.common.auth;
 
 import java.util.Optional;
 
+import com.ssafy.common.exception.BusinessException;
+import com.ssafy.common.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,11 +25,7 @@ public class SsafyUserDetailService implements UserDetailsService{
 	
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    		User user = userService.getUserByUserId(username);
-    		if(user != null) {
-    			SsafyUserDetails userDetails = new SsafyUserDetails(user);
-    			return userDetails;
-    		}
-    		return null;
+		User user = userService.getUserByUserId(username).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        return new SsafyUserDetails(user);
     }
 }

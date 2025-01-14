@@ -1,5 +1,8 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.common.exception.BusinessException;
+import com.ssafy.common.exception.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +28,7 @@ import io.swagger.annotations.ApiResponse;
 /**
  * 인증 관련 API 요청 처리를 위한 컨트롤러 정의.
  */
+@Slf4j
 @Api(value = "인증 API", tags = {"Auth."})
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -46,14 +50,17 @@ public class AuthController {
 	public ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginPostReq loginInfo) {
 		String userId = loginInfo.getId();
 		String password = loginInfo.getPassword();
-		
-		User user = userService.getUserByUserId(userId);
+
+		User user = userService.getUserByUserId(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
 		// 로그인 요청한 유저로부터 입력된 패스워드 와 디비에 저장된 유저의 암호화된 패스워드가 같은지 확인.(유효한 패스워드인지 여부 확인)
-		if(passwordEncoder.matches(password, user.getPassword())) {
-			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-			return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+		if(!passwordEncoder.matches(password, user.getPassword())) {
+			log.debug(password, passwordEncoder.matches(password, user.getPassword()));
+			// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
+			throw new BusinessException(ErrorCode.USER_ENVALID_PASSWORD);
 		}
-		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
-		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
+
+		// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+		return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
 	}
 }
