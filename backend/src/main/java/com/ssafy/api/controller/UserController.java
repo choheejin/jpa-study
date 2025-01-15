@@ -2,6 +2,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.common.exception.BusinessException;
 import com.ssafy.common.exception.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -33,6 +34,7 @@ import springfox.documentation.annotations.ApiIgnore;
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
  */
+@Slf4j
 @Api(value = "유저 API", tags = {"User"})
 @RestController
 @RequestMapping("/api/v1/users")
@@ -72,9 +74,12 @@ public class UserController {
 		 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
 		 */
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+
 		String userId = userDetails.getUsername();
 		User user = userService.getUserByUserId(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-		
+
+		log.debug(user.toString());
+
 		return ResponseEntity.status(200).body(UserRes.of(user));
 	}
 }
