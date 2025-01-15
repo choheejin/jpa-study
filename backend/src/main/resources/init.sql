@@ -2,13 +2,13 @@ USE ssafy_web_db;
 
 -- Create table for conference_category
 CREATE TABLE conference_category (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL
 );
 
 -- Create table for user
 CREATE TABLE user (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     department VARCHAR(255),
     position VARCHAR(255),
     name VARCHAR(255) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE user (
 
 -- Create table for conference
 CREATE TABLE conference (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     owner_id INTEGER NOT NULL,
     conference_category INTEGER NOT NULL,
     call_start_time DATETIME,
@@ -33,7 +33,7 @@ CREATE TABLE conference (
 
 -- Create table for user_conference
 CREATE TABLE user_conference (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     conference_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     FOREIGN KEY (conference_id) REFERENCES conference (id),
@@ -42,7 +42,7 @@ CREATE TABLE user_conference (
 
 -- Create table for conference_history
 CREATE TABLE conference_history (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     conference_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     action SMALLINT CHECK (action IN (1, 2, 3)), -- 1: CREATE, 2: JOIN, 3: EXIT
@@ -52,9 +52,9 @@ CREATE TABLE conference_history (
 );
 
 -- user 테이블 초기 데이터 삽입
-INSERT INTO user (id, department, name, password, position, user_id)
+INSERT INTO user (department, name, password, position, user_id)
 VALUES
-(1, 'SSAFY', '홍길동', '$2a$10$0sNlKs6TUMs4hTLydDpC4.LWFpzb4dY20ZYNEegPKHkeEMqvyk85S', '교육생', 'test-1');
+('SSAFY', '홍길동', '$2a$10$0sNlKs6TUMs4hTLydDpC4.LWFpzb4dY20ZYNEegPKHkeEMqvyk85S', '교육생', 'test-1');
 
 -- conference_category 테이블 초기 데이터 삽입
 INSERT INTO conference_category (id, name)
