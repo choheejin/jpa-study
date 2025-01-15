@@ -2,16 +2,13 @@ package com.ssafy.api.controller;
 
 import com.ssafy.common.exception.BusinessException;
 import com.ssafy.common.exception.ErrorCode;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.api.request.UserLoginPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
@@ -81,5 +78,15 @@ public class UserController {
 		log.debug(user.toString());
 
 		return ResponseEntity.status(200).body(UserRes.of(user));
+	}
+
+	@GetMapping("/{userId}")
+	public void findUserId(@Parameter(description = "찾을 사용자 아이디", example = "ssafy_web")
+							   @PathVariable("userId") String userId) {
+        log.info("찾는 유저 아이디::: {}", userId);
+
+        userService.getUserByUserId(userId).ifPresent(user -> {throw new BusinessException(ErrorCode.USER_FORBIDDEN);});
+
+        return;
 	}
 }
