@@ -1,5 +1,8 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.UserInfoPatchReq;
+import com.ssafy.common.exception.BusinessException;
+import com.ssafy.common.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,5 +44,16 @@ public class UserServiceImpl implements UserService {
 	public Optional<User> getUserByUserId(String userId) {
 		// 디비에 유저 정보 조회 (userId 를 통한 조회).
 		return userRepositorySupport.findUserByUserId(userId);
+	}
+
+	@Override
+	public User patchUserInfo(UserInfoPatchReq userInfoPatchReq, String userId) {
+		User user = userRepositorySupport.findUserByUserId(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+		user.setPosition(userInfoPatchReq.getPosition());
+		user.setName(userInfoPatchReq.getName());
+		user.setDepartment(userInfoPatchReq.getDepartment());
+
+		return userRepository.save(user);
 	}
 }

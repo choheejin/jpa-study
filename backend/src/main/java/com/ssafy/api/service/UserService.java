@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.UserInfoPatchReq;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.db.entity.User;
 
@@ -11,4 +12,5 @@ import java.util.Optional;
 public interface UserService {
 	User createUser(UserRegisterPostReq userRegisterInfo);
 	Optional<User> getUserByUserId(String userId);
+	User patchUserInfo(UserInfoPatchReq userInfoPatchReq, String userId);
 }
