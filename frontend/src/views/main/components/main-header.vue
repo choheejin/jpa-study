@@ -11,10 +11,11 @@
           />
           <i class="icon-search"></i>
         </div>
-        <div class="button-wrapper">
+        <div v-if="state.id == null" class="button-wrapper">
           <button @click="clickRegister">회원가입</button>
           <button @click="clickLogin">로그인</button>
         </div>
+        <div v-else class="button-wrapper">{{ state.id }}</div>
       </div>
     </div>
     <div class="hide-on-big">
@@ -64,6 +65,12 @@ export default {
     const store = useStore()
     const router = useRouter()
     const state = reactive({
+      id: computed(() => {
+        console.log(store.getters['accountStore/getId'] + "아이디 됨");
+        return store.getters['accountStore/getToken'] != null 
+      ? store.getters['accountStore/getId'] 
+      : null
+      }),
       searchValue: null,
       isCollapse: true,
       menuItems: computed(() => {
