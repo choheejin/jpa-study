@@ -13,4 +13,5 @@ public interface UserService {
 	User createUser(UserRegisterPostReq userRegisterInfo);
 	Optional<User> getUserByUserId(String userId);
 	User patchUserInfo(UserInfoPatchReq userInfoPatchReq, String userId);
+	void deleteUser(String id);
 }

@@ -98,10 +98,23 @@ public class UserController {
     })
     public ResponseEntity<? extends BaseResponseBody> updateUserInfo(@RequestBody @ApiParam(value = "로그인한 사용자의 정보", required = true) UserInfoPatchReq userInfo,
                                                                      @PathVariable("userId") String userId) {
-        log.debug("수정하려는 유저 정보: {}", userInfo);
+        log.debug("수정하려는 유저 정보");
 
         User user = userService.patchUserInfo(userInfo, userId);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    @DeleteMapping("/{userId}")
+    @ApiOperation(value = "유저 정보 삭제", notes = "유저 정보를 삭제합니다")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "사용자 아이디", required = true, dataType = "string", paramType = "path", defaultValue = "ssafy_web"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success")
+    })
+    public ResponseEntity<? extends BaseResponseBody> deleteUserInfo(@PathVariable("userId") String userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(204, "Success"));
     }
 }
