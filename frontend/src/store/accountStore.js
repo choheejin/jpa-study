@@ -35,7 +35,7 @@ const actions = {
     commit("setToken", response.data.accessToken);
   },
 
-  logoutAction: () => {
+  logoutAction: ({ commit }) => {
     localStorage.removeItem("ssafy-id");
     localStorage.removeItem("ssafy-token");
 

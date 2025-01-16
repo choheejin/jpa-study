@@ -1,4 +1,4 @@
-<template>
+<template>x
   <div class="main-header" :style="{ height: height }">
     <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"></div></div>
     <div class="hide-on-small">
@@ -15,7 +15,10 @@
           <button @click="clickRegister">회원가입</button>
           <button @click="clickLogin">로그인</button>
         </div>
-        <div v-else class="button-wrapper">{{ state.id }}</div>
+        <div v-else class="button-wrapper">
+          <button disabled style="cursor: default;">{{ state.id }}</button>
+          <button @click="clickLogout">로그아웃</button>
+        </div>
       </div>
     </div>
     <div class="hide-on-big">
@@ -118,7 +121,11 @@ export default {
       state.isCollapse = !state.isCollapse
     }
 
-    return { state, menuSelect, clickLogo, clickLogin, clickRegister, changeCollapse }
+    const clickLogout = () => {
+      store.dispatch('accountStore/logoutAction');
+    }
+
+    return { state, menuSelect, clickLogo, clickLogin, clickRegister, changeCollapse, clickLogout }
   }
 }
 </script>
