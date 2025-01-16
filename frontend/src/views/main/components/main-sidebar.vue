@@ -37,6 +37,16 @@ export default {
     const state = reactive({
       menuItems: computed(() => {
         const MenuItems = store.getters['menuStore/getMenus']
+
+        if(!store.getters['accountStore/getToken']) {
+          return Object.entries(MenuItems)
+                .filter(([key, value]) => value.needLogin === false)
+                .map(([key, value]) => ({
+                  icon: value.icon,
+                  title: value.name,
+                }));
+        }
+
         return Object.keys(MenuItems).map(key => ({
           icon: MenuItems[key].icon,
           title: MenuItems[key].name
