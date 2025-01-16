@@ -1,6 +1,11 @@
 <template>
   <div v-if="state.dialogVisible" class="login-dialog-overlay">
     <div class="login-dialog">
+      <div v-if="state.loading" class="animate-span">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="animate">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+      </div>
       <div class="login-dialog-header">
         <h3>회원가입</h3>
         <button class="close-btn" @click="handleClose">&times;</button>
@@ -45,6 +50,33 @@
 </template>
 
 <style>
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-span {
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  inset: 0px;
+  position: absolute;
+}
+
+.animate {
+  width: 3rem;
+  height: 3rem;
+  animation: spin 1s linear infinite;
+}
+
 .login-dialog-overlay {
   position: fixed;
   top: 0;
@@ -136,7 +168,8 @@ export default {
         name: '',
       },
       validPassword: '',
-      dialogVisible: props.open
+      dialogVisible: props.open,
+      loading: false,
     })
 
     const errors = reactive({
@@ -227,9 +260,10 @@ export default {
     const clickSignin = async () => {
       if (validate()) {
         console.log('submit')
-        
+        state.loading = true;
         const response = await requestSignin(state.form).then((res) => {
           if(res.status == 200) {
+            state.loading = false;
             alert("회원가입이 완료되었습니다.")
             handleClose()
           }
