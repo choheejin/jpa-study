@@ -2,7 +2,8 @@
   <div class="main-wrapper">
     <main-header
       :height="'70px'"
-      @openLoginDialog="onOpenLoginDialog"/>
+      @openLoginDialog="onOpenLoginDialog"
+      @openSigninDialog="onOpenSigninDialog"/>
     <div class="main-container">
       <aside class="sidebar hide-on-small" style="width: 240px;">
         <main-sidebar :width="'240px'"/>
@@ -15,6 +16,9 @@
     <login-dialog
       :open="loginDialogOpen"
       @closeLoginDialog="onCloseLoginDialog"/>
+    <signin-dialog
+      :open="signinDialogOpen"
+      @closeSigninDialog="onCloseSigninDialog"/>
   </div>
 </template>
 
@@ -59,6 +63,7 @@ import LoginDialog from './components/login-dialog'
 import MainHeader from './components/main-header'
 import MainSidebar from './components/main-sidebar'
 import MainFooter from './components/main-footer'
+import SigninDialog from './components/signin-dialog.vue'
 
 export default {
   name: 'Main',
@@ -66,11 +71,13 @@ export default {
     MainHeader,
     MainSidebar,
     MainFooter,
-    LoginDialog
+    LoginDialog,
+    SigninDialog,
   },
   data() {
     return {
-      loginDialogOpen: false
+      loginDialogOpen: false,
+      signinDialogOpen: false,
     }
   },
   methods: {
@@ -79,6 +86,12 @@ export default {
     },
     onCloseLoginDialog() {
       this.loginDialogOpen = false
+    },
+    onOpenSigninDialog() {
+      this.signinDialogOpen = true
+    },
+    onCloseSigninDialog() {
+      this.signinDialogOpen = false
     }
   }
 }

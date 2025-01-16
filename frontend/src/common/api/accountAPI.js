@@ -8,4 +8,6 @@ import $axios from "axios";
  */
 const requestLogin = (payload) => $axios.post("http://localhost:8080/api/v1/auth/login", payload);
 
-export { requestLogin };
+const requestSignin = payload => $axios.post("http://localhost:8080/api/v1/users", payload);
+
+export { requestLogin, requestSignin };

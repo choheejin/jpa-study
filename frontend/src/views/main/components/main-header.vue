@@ -1,4 +1,4 @@
-<template>x
+<template>
   <div class="main-header" :style="{ height: height }">
     <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"></div></div>
     <div class="hide-on-small">
@@ -115,6 +115,7 @@ export default {
 
     const clickRegister = () => {
       // Register event handler
+      emit('openSigninDialog')
     }
 
     const changeCollapse = () => {
